@@ -28,6 +28,7 @@
         "@ChinaTelecomOperators.sms_forward.body",
         "@ChinaTelecomOperators.sms_forward.pushdeer",
         "@ChinaTelecomOperators.sms_forward.bark",
+        "@ChinaTelecomOperators.sms_forward.custom_post",
         "@ChinaTelecomOperators.sms_forward.keys"
       ],
       "author": "ChinaTelecomOperators",
@@ -149,6 +150,13 @@
           "desc": "[推送全文] 会被自动替换. 形如 https://api2.pushdeer.com/message/push?pushkey=XXXXXXXXXXX&text=[推送全文]"
         },
         {
+          "id": "@ChinaTelecomOperators.sms_forward.custom_post",
+          "name": "自定义 POST 请求",
+          "val": "",
+          "type": "textarea",
+          "desc": "自定义 POST 请求. [推送标题], [推送内容], [复制内容], [推送全文] 会被自动替换. 格式为 URL换行BODY. 例: https://example.com/push\n{\"title\":\"[推送标题]\",\"body\":\"[推送内容]\"}"
+        },
+        {
           "id": "@ChinaTelecomOperators.sms_forward.keys",
           "name": "其他配置的 key(英文逗号,分隔)",
           "val": "",
@@ -180,7 +188,8 @@
         "@ChinaTelecomOperators.sms_forward-1.subtitle",
         "@ChinaTelecomOperators.sms_forward-1.body",
         "@ChinaTelecomOperators.sms_forward-1.pushdeer",
-        "@ChinaTelecomOperators.sms_forward-1.bark"
+        "@ChinaTelecomOperators.sms_forward-1.bark",
+        "@ChinaTelecomOperators.sms_forward-1.custom_post"
       ],
       "author": "ChinaTelecomOperators",
       "repo": "https://github.com/ChinaTelecomOperators/SMSForward",
@@ -268,6 +277,13 @@
           "val": "",
           "type": "textarea",
           "desc": "[推送全文] 会被自动替换. 形如 https://api2.pushdeer.com/message/push?pushkey=XXXXXXXXXXX&text=[推送全文]"
+        },
+        {
+          "id": "@ChinaTelecomOperators.sms_forward-1.custom_post",
+          "name": "自定义 POST 请求",
+          "val": "",
+          "type": "textarea",
+          "desc": "自定义 POST 请求. [推送标题], [推送内容], [复制内容], [推送全文] 会被自动替换. 格式为 URL换行BODY. 例: https://example.com/push\n{\"title\":\"[推送标题]\",\"body\":\"[推送内容]\"}"
         }
       ],
       "icons": [
