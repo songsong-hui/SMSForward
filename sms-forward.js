@@ -295,10 +295,10 @@ async function notify(title, subtitle, body, { copy, KEY_PUSHDEER, KEY_BARK, KEY
           .replace(/\[复制内容]/g, encodeURIComponent(copy))
           .replace(/\[推送全文]/g, encodeURIComponent(pushFullText))
         const finalBody = postBody
-          .replace(/\[推送标题]/g, title.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'))
-          .replace(/\[推送内容]/g, pushContent.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'))
-          .replace(/\[复制内容]/g, copy.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'))
-          .replace(/\[推送全文]/g, pushFullText.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'))
+          .replace(/\[推送标题]/g, title)
+          .replace(/\[推送内容]/g, JSON.stringify(pushContent))
+          .replace(/\[复制内容]/g, JSON.stringify(copy))
+          .replace(/\[推送全文]/g, JSON.stringify(pushFullText))
         
         const options = {
           url: finalUrl,
