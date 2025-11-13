@@ -64,6 +64,8 @@ let result
   console.log(`号码 ${sender}`)
   console.log(`内容 ${text}`)
 
+  
+
   const fn = async (key, index) => {
     $.log(`👉🏻 [${index}][${key}] 配置开始`)
     const KEY_DISABLED = `@ChinaTelecomOperators.${key}.disabled`
@@ -295,10 +297,10 @@ async function notify(title, subtitle, body, { copy, KEY_PUSHDEER, KEY_BARK, KEY
           .replace(/\[复制内容]/g, encodeURIComponent(copy))
           .replace(/\[推送全文]/g, encodeURIComponent(pushFullText))
         const finalBody = postBody
-          .replace(/\[推送标题]/g, title)
-          .replace(/\[推送内容]/g, JSON.stringify(pushContent))
-          .replace(/\[复制内容]/g, JSON.stringify(copy))
-          .replace(/\[推送全文]/g, JSON.stringify(pushFullText))
+          .replace(/\[推送标题]/g, escapeJsonString(title))
+          .replace(/\[推送内容]/g, escapeJsonString(pushContent))
+          .replace(/\[复制内容]/g, escapeJsonString(copy))
+          .replace(/\[推送全文]/g, escapeJsonString(pushFullText));
         
         const options = {
           url: finalUrl,
@@ -343,6 +345,16 @@ function renderTpl(tpl, data) {
       .replace('[码]', data.code || '')
       .replace(/  +/g, ' ')
   )
+}
+
+/**
+ * 将普通字符串转义为可以安全地嵌入到JSON字符串值中的形式。
+ * @param {string} str - 需要转义的字符串
+ * @returns {string} - 转义后的字符串
+ */
+function escapeJsonString(str) {
+  // JSON.stringify会进行转义并添加双引号，我们去掉首尾的双引号
+  return JSON.stringify(str).slice(1, -1);
 }
 
 function lodash_set(obj, path, value) {
