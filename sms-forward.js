@@ -308,7 +308,7 @@ async function notify(title, subtitle, body, { copy, KEY_PUSHDEER, KEY_BARK, KEY
           }
         }
         
-        $.log(`开始 customPost 请求: ${JSON.stringify(options)}`)
+        $.log(`开始 customPost 请求: ${JSON.stringify(options)}，finalBody:${JSON.stringify(finalBody)}`)
         const res = await $.http.post(options)
 
         const status = $.lodash_get(res, 'status')
