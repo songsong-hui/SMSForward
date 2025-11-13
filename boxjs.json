@@ -1,538 +1,550 @@
 {
-  "id": "app_smsforward.china_telecom_operators",
-  "name": "SMSForward",
-  "author": "ChinaTelecomOperators",
-  "repo": "https://github.com/ChinaTelecomOperators/SMSForward",
-  "apps": [
-    {
-      "id": "app_smsforward",
-      "name": "短信转发",
-      "descs_html": [
-        " <b> 代码仓库：<a href='https://github.com/ChinaTelecomOperators/SMSForward'>查看</a> </b> ",
-        " <b> 使用教程：<a href='https://github.com/ChinaTelecomOperators/SMSForward/blob/main/README.md'>查看</a> </b> "
-      ],
-      "keys": [
-        "@smsforward",
-        "@smsforward1"
-      ],
-      "settings": [
+    "id": "app_smsforward.songsong",
+    "name": "SMSForward",
+    "author": "songsong",
+    "repo": "https://github.com/songsong/SMSForward",
+    "apps": [
         {
-          "id": "@smsforward",
-          "name": "短信转发",
-          "val": "",
-          "type": "string",
-          "placeholder": "填写需要转发的手机号"
-        },
-        {
-          "id": "@smsforward1",
-          "name": "短信转发(1)",
-          "val": "",
-          "type": "string",
-          "placeholder": "填写需要转发的手机号(1)"
+            "id": "app_smsforward",
+            "name": "短信转发",
+            "descs_html": [
+                " <b> 代码仓库：<a href='https://github.com/ChinaTelecomOperators/SMSForward'>查看</a> </b> ",
+                " <b> 使用教程：<a href='https://github.com/ChinaTelecomOperators/SMSForward/blob/main/README.md'>查看</a> </b> "
+            ],
+            "keys": [
+                "@smsforward",
+                "@smsforward1"
+            ],
+            "settings": [
+                {
+                    "id": "@smsforward",
+                    "name": "短信转发",
+                    "val": "",
+                    "type": "string",
+                    "placeholder": "填写需要转发的手机号"
+                },
+                {
+                    "id": "@smsforward1",
+                    "name": "短信转发(1)",
+                    "val": "",
+                    "type": "string",
+                    "placeholder": "填写需要转发的手机号(1)"
+                }
+            ],
+            "sessions": [
+                {
+                    "id": "session_smsforward",
+                    "name": "会话"
+                }
+            ],
+            "script_patch": [
+                {
+                    "name": "版本信息",
+                    "match": "name = 'SMSForward'",
+                    "target": "const version = 'v2.2.0'",
+                    "replace": "const version = 'v2.2.0'"
+                }
+            ],
+            "subs": [
+                {
+                    "id": "smsforward_config",
+                    "name": "短信转发",
+                    "key": "@smsforward",
+                    "type": "object",
+                    "items": [
+                        {
+                            "group": "基础设置",
+                            "items": [
+                                {
+                                    "id": "enable",
+                                    "name": "启用",
+                                    "type": "boolean",
+                                    "val": true
+                                },
+                                {
+                                    "id": "type",
+                                    "name": "转发类型",
+                                    "type": "select",
+                                    "val": "Tencent",
+                                    "options": [
+                                        {
+                                            "label": "腾讯手机管家",
+                                            "value": "Tencent"
+                                        },
+                                        {
+                                            "label": "360手机卫士",
+                                            "value": "Qihoo"
+                                        }
+                                    ],
+                                    "desc": "默认为腾讯手机管家,若出现转发失败可尝试更换为360手机卫士"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "号码过滤",
+                            "items": [
+                                {
+                                    "id": "sender_allow",
+                                    "name": "允许名单",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配发送者号码,支持正则,多个请换行",
+                                    "desc": "为空时,默认允许所有号码"
+                                },
+                                {
+                                    "id": "sender_deny",
+                                    "name": "阻止名单",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配发送者号码,支持正则,多个请换行"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "内容过滤",
+                            "items": [
+                                {
+                                    "id": "text_allow",
+                                    "name": "关键词允许",
+                                    "type": "textarea",
+                                    "val": "验证码\n取件码\n动态密码",
+                                    "placeholder": "匹配短信内容,支持正则,多个请换行",
+                                    "desc": "为空时,默认允许所有内容"
+                                },
+                                {
+                                    "id": "text_deny",
+                                    "name": "关键词阻止",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配短信内容,支持正则,多个请换行"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "验证码提取",
+                            "items": [
+                                {
+                                    "id": "code_test",
+                                    "name": "识别规则",
+                                    "type": "text",
+                                    "val": "[0-9]{4,8}",
+                                    "desc": "用于判断是否为验证码短信的规则, 匹配到时将进入提取流程"
+                                },
+                                {
+                                    "id": "code_get",
+                                    "name": "提取规则",
+                                    "type": "text",
+                                    "val": "(?<=((验证|动态密)码|code|code is):?)\\s*\\d{4,8}|\\d{4,8}(?=((为|is)您的(验证|动态密)码))",
+                                    "desc": "用于提取验证码, 匹配到的第1个结果将作为验证码"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "隐私保护",
+                            "items": [
+                                {
+                                    "id": "no_post",
+                                    "name": "禁止提交数据",
+                                    "type": "boolean",
+                                    "val": false,
+                                    "desc": "开启后将不会提交数据到腾讯/360接口, 用于保护隐私"
+                                },
+                                {
+                                    "id": "replace_num",
+                                    "name": "替换数字",
+                                    "type": "boolean",
+                                    "val": false,
+                                    "desc": "开启后将会把提交的短信内容中的数字替换为随机数, 用于保护隐私"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "推送标题模板",
+                            "items": [
+                                {
+                                    "id": "name_from",
+                                    "name": "标题来源",
+                                    "type": "select",
+                                    "val": "name",
+                                    "options": [
+                                        {
+                                            "label": "默认(发信人)",
+                                            "value": "name"
+                                        },
+                                        {
+                                            "label": "自定义",
+                                            "value": "custom"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "name_diy",
+                                    "name": "自定义标题",
+                                    "type": "text",
+                                    "val": "短信转发"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "推送内容模板",
+                            "items": [
+                                {
+                                    "id": "gotify_title",
+                                    "name": "Gotify/Bark 标题",
+                                    "type": "text",
+                                    "val": "$name$"
+                                },
+                                {
+                                    "id": "gotify_subtitle",
+                                    "name": "Bark 副标题",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "id": "gotify_msg",
+                                    "name": "推送内容",
+                                    "type": "text",
+                                    "val": "$text$",
+                                    "desc": "支持变量: $name$ 发信人 $text$ 短信全文 $code$ 验证码"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "@push",
+                            "name": "推送",
+                            "items": [
+                                {
+                                    "id": "bark_url",
+                                    "name": "Bark",
+                                    "type": "text",
+                                    "placeholder": "Bark RUL"
+                                },
+                                {
+                                    "id": "pushdeer_url",
+                                    "name": "PushDeer",
+                                    "type": "text",
+                                    "placeholder": "PushDeer URL"
+                                },
+                                {
+                                    "id": "pushplus_url",
+                                    "name": "PushPlus",
+                                    "type": "text",
+                                    "placeholder": "PushPlus URL"
+                                },
+                                {
+                                    "id": "telegram_url",
+                                    "name": "Telegram",
+                                    "type": "text",
+                                    "placeholder": "Telegram URL"
+                                },
+                                {
+                                    "id": "gotify_url",
+                                    "name": "Gotify",
+                                    "type": "text",
+                                    "placeholder": "Gotify URL"
+                                },
+                                {
+                                    "id": "igotor_url",
+                                    "name": "iGot",
+                                    "type": "text",
+                                    "placeholder": "iGot URL"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "自定义推送 (Webhook)",
+                            "items": [
+                                {
+                                    "id": "custom_webhook_url",
+                                    "name": "Webhook URL",
+                                    "type": "text",
+                                    "desc": "你的自定义接收端URL, 填写后将启用此推送."
+                                },
+                                {
+                                    "id": "custom_webhook_method",
+                                    "name": "请求方法",
+                                    "type": "select",
+                                    "options": [
+                                        {
+                                            "label": "POST",
+                                            "value": "POST"
+                                        },
+                                        {
+                                            "label": "GET",
+                                            "value": "GET"
+                                        }
+                                    ],
+                                    "val": "POST",
+                                    "desc": "选择发送通知时使用的HTTP请求方法."
+                                },
+                                {
+                                    "id": "custom_webhook_headers",
+                                    "name": "请求头 (Headers)",
+                                    "type": "textarea",
+                                    "val": "{\"Content-Type\":\"application/json\"}",
+                                    "desc": "自定义请求头, 需为标准的JSON格式. 仅在POST方法时建议使用."
+                                },
+                                {
+                                    "id": "custom_webhook_body",
+                                    "name": "请求体 (Body)",
+                                    "type": "textarea",
+                                    "val": "{\"title\":\"$name$\", \"content\":\"$text$\", \"code\":\"$code$\"}",
+                                    "desc": "POST请求的主体内容, 需为标准的JSON格式. 支持变量 $name$, $text$, $code$."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "smsforward_config1",
+                    "name": "短信转发(1)",
+                    "key": "@smsforward1",
+                    "type": "object",
+                    "items": [
+                        {
+                            "group": "基础设置",
+                            "items": [
+                                {
+                                    "id": "enable",
+                                    "name": "启用",
+                                    "type": "boolean",
+                                    "val": false
+                                },
+                                {
+                                    "id": "type",
+                                    "name": "转发类型",
+                                    "type": "select",
+                                    "val": "Tencent",
+                                    "options": [
+                                        {
+                                            "label": "腾讯手机管家",
+                                            "value": "Tencent"
+                                        },
+                                        {
+                                            "label": "360手机卫士",
+                                            "value": "Qihoo"
+                                        }
+                                    ],
+                                    "desc": "默认为腾讯手机管家,若出现转发失败可尝试更换为360手机卫士"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "号码过滤",
+                            "items": [
+                                {
+                                    "id": "sender_allow",
+                                    "name": "允许名单",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配发送者号码,支持正则,多个请换行",
+                                    "desc": "为空时,默认允许所有号码"
+                                },
+                                {
+                                    "id": "sender_deny",
+                                    "name": "阻止名单",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配发送者号码,支持正则,多个请换行"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "内容过滤",
+                            "items": [
+                                {
+                                    "id": "text_allow",
+                                    "name": "关键词允许",
+                                    "type": "textarea",
+                                    "val": "验证码\n取件码\n动态密码",
+                                    "placeholder": "匹配短信内容,支持正则,多个请换行",
+                                    "desc": "为空时,默认允许所有内容"
+                                },
+                                {
+                                    "id": "text_deny",
+                                    "name": "关键词阻止",
+                                    "type": "textarea",
+                                    "val": "",
+                                    "placeholder": "匹配短信内容,支持正则,多个请换行"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "验证码提取",
+                            "items": [
+                                {
+                                    "id": "code_test",
+                                    "name": "识别规则",
+                                    "type": "text",
+                                    "val": "[0-9]{4,8}",
+                                    "desc": "用于判断是否为验证码短信的规则, 匹配到时将进入提取流程"
+                                },
+                                {
+                                    "id": "code_get",
+                                    "name": "提取规则",
+                                    "type": "text",
+                                    "val": "(?<=((验证|动态密)码|code|code is):?)\\s*\\d{4,8}|\\d{4,8}(?=((为|is)您的(验证|动态密)码))",
+                                    "desc": "用于提取验证码, 匹配到的第1个结果将作为验证码"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "隐私保护",
+                            "items": [
+                                {
+                                    "id": "no_post",
+                                    "name": "禁止提交数据",
+                                    "type": "boolean",
+                                    "val": false,
+                                    "desc": "开启后将不会提交数据到腾讯/360接口, 用于保护隐私"
+                                },
+                                {
+                                    "id": "replace_num",
+                                    "name": "替换数字",
+                                    "type": "boolean",
+                                    "val": false,
+                                    "desc": "开启后将会把提交的短信内容中的数字替换为随机数, 用于保护隐私"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "推送标题模板",
+                            "items": [
+                                {
+                                    "id": "name_from",
+                                    "name": "标题来源",
+                                    "type": "select",
+                                    "val": "name",
+                                    "options": [
+                                        {
+                                            "label": "默认(发信人)",
+                                            "value": "name"
+                                        },
+                                        {
+                                            "label": "自定义",
+                                            "value": "custom"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "name_diy",
+                                    "name": "自定义标题",
+                                    "type": "text",
+                                    "val": "短信转发"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "推送内容模板",
+                            "items": [
+                                {
+                                    "id": "gotify_title",
+                                    "name": "Gotify/Bark 标题",
+                                    "type": "text",
+                                    "val": "$name$"
+                                },
+                                {
+                                    "id": "gotify_subtitle",
+                                    "name": "Bark 副标题",
+                                    "type": "text",
+                                    "val": ""
+                                },
+                                {
+                                    "id": "gotify_msg",
+                                    "name": "推送内容",
+                                    "type": "text",
+                                    "val": "$text$",
+                                    "desc": "支持变量: $name$ 发信人 $text$ 短信全文 $code$ 验证码"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "@push",
+                            "name": "推送",
+                            "items": [
+                                {
+                                    "id": "bark_url",
+                                    "name": "Bark",
+                                    "type": "text",
+                                    "placeholder": "Bark RUL"
+                                },
+                                {
+                                    "id": "pushdeer_url",
+                                    "name": "PushDeer",
+                                    "type": "text",
+                                    "placeholder": "PushDeer URL"
+                                },
+                                {
+                                    "id": "pushplus_url",
+                                    "name": "PushPlus",
+                                    "type": "text",
+                                    "placeholder": "PushPlus URL"
+                                },
+                                {
+                                    "id": "telegram_url",
+                                    "name": "Telegram",
+                                    "type": "text",
+                                    "placeholder": "Telegram URL"
+                                },
+                                {
+                                    "id": "gotify_url",
+                                    "name": "Gotify",
+                                    "type": "text",
+                                    "placeholder": "Gotify URL"
+                                },
+                                {
+                                    "id": "igotor_url",
+                                    "name": "iGot",
+                                    "type": "text",
+                                    "placeholder": "iGot URL"
+                                }
+                            ]
+                        },
+                        {
+                            "group": "自定义推送 (Webhook)",
+                            "items": [
+                                {
+                                    "id": "custom_webhook_url",
+                                    "name": "Webhook URL",
+                                    "type": "text",
+                                    "desc": "你的自定义接收端URL, 填写后将启用此推送."
+                                },
+                                {
+                                    "id": "custom_webhook_method",
+                                    "name": "请求方法",
+                                    "type": "select",
+                                    "options": [
+                                        {
+                                            "label": "POST",
+                                            "value": "POST"
+                                        },
+                                        {
+                                            "label": "GET",
+                                            "value": "GET"
+                                        }
+                                    ],
+                                    "val": "POST",
+                                    "desc": "选择发送通知时使用的HTTP请求方法."
+                                },
+                                {
+                                    "id": "custom_webhook_headers",
+                                    "name": "请求头 (Headers)",
+                                    "type": "textarea",
+                                    "val": "{\"Content-Type\":\"application/json\"}",
+                                    "desc": "自定义请求头, 需为标准的JSON格式. 仅在POST方法时建议使用."
+                                },
+                                {
+                                    "id": "custom_webhook_body",
+                                    "name": "请求体 (Body)",
+                                    "type": "textarea",
+                                    "val": "{\"title\":\"$name$\", \"content\":\"$text$\", \"code\":\"$code$\"}",
+                                    "desc": "POST请求的主体内容, 需为标准的JSON格式. 支持变量 $name$, $text$, $code$."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
-      ],
-      "sessions": [
-        {
-          "id": "session_smsforward",
-          "name": "会话"
-        }
-      ],
-      "script_patch": [
-        {
-          "name": "版本信息",
-          "match": "name = 'SMSForward'",
-          "target": "const version = 'v2.2.0'",
-          "replace": "const version = 'v2.2.0'"
-        }
-      ],
-      "subs": [
-        {
-          "id": "smsforward_config",
-          "name": "短信转发",
-          "key": "@smsforward",
-          "type": "object",
-          "items": [
-            {
-              "group": "基础设置",
-              "items": [
-                {
-                  "id": "enable",
-                  "name": "启用",
-                  "type": "boolean",
-                  "val": true
-                },
-                {
-                  "id": "type",
-                  "name": "转发类型",
-                  "type": "select",
-                  "val": "Tencent",
-                  "options": [
-                    {
-                      "label": "腾讯手机管家",
-                      "value": "Tencent"
-                    },
-                    {
-                      "label": "360手机卫士",
-                      "value": "Qihoo"
-                    }
-                  ],
-                  "desc": "默认为腾讯手机管家,若出现转发失败可尝试更换为360手机卫士"
-                }
-              ]
-            },
-            {
-              "group": "号码过滤",
-              "items": [
-                {
-                  "id": "sender_allow",
-                  "name": "允许名单",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配发送者号码,支持正则,多个请换行",
-                  "desc": "为空时,默认允许所有号码"
-                },
-                {
-                  "id": "sender_deny",
-                  "name": "阻止名单",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配发送者号码,支持正则,多个请换行"
-                }
-              ]
-            },
-            {
-              "group": "内容过滤",
-              "items": [
-                {
-                  "id": "text_allow",
-                  "name": "关键词允许",
-                  "type": "textarea",
-                  "val": "验证码\n取件码\n动态密码",
-                  "placeholder": "匹配短信内容,支持正则,多个请换行",
-                  "desc": "为空时,默认允许所有内容"
-                },
-                {
-                  "id": "text_deny",
-                  "name": "关键词阻止",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配短信内容,支持正则,多个请换行"
-                }
-              ]
-            },
-            {
-              "group": "验证码提取",
-              "items": [
-                {
-                  "id": "code_test",
-                  "name": "识别规则",
-                  "type": "text",
-                  "val": "[0-9]{4,8}",
-                  "desc": "用于判断是否为验证码短信的规则, 匹配到时将进入提取流程"
-                },
-                {
-                  "id": "code_get",
-                  "name": "提取规则",
-                  "type": "text",
-                  "val": "(?<=((验证|动态密)码|code|code is):?)\\s*\\d{4,8}|\\d{4,8}(?=((为|is)您的(验证|动态密)码))",
-                  "desc": "用于提取验证码, 匹配到的第1个结果将作为验证码"
-                }
-              ]
-            },
-            {
-              "group": "隐私保护",
-              "items": [
-                {
-                  "id": "no_post",
-                  "name": "禁止提交数据",
-                  "type": "boolean",
-                  "val": false,
-                  "desc": "开启后将不会提交数据到腾讯/360接口, 用于保护隐私"
-                },
-                {
-                  "id": "replace_num",
-                  "name": "替换数字",
-                  "type": "boolean",
-                  "val": false,
-                  "desc": "开启后将会把提交的短信内容中的数字替换为随机数, 用于保护隐私"
-                }
-              ]
-            },
-            {
-              "group": "推送标题模板",
-              "items": [
-                {
-                  "id": "name_from",
-                  "name": "标题来源",
-                  "type": "select",
-                  "val": "name",
-                  "options": [
-                    {
-                      "label": "默认(发信人)",
-                      "value": "name"
-                    },
-                    {
-                      "label": "自定义",
-                      "value": "custom"
-                    }
-                  ]
-                },
-                {
-                  "id": "name_diy",
-                  "name": "自定义标题",
-                  "type": "text",
-                  "val": "短信转发"
-                }
-              ]
-            },
-            {
-              "group": "推送内容模板",
-              "items": [
-                {
-                  "id": "gotify_title",
-                  "name": "Gotify/Bark 标题",
-                  "type": "text",
-                  "val": "$name$"
-                },
-                {
-                  "id": "gotify_subtitle",
-                  "name": "Bark 副标题",
-                  "type": "text",
-                  "val": ""
-                },
-                {
-                  "id": "gotify_msg",
-                  "name": "推送内容",
-                  "type": "text",
-                  "val": "$text$",
-                  "desc": "支持变量: $name$ 发信人 $text$ 短信全文 $code$ 验证码"
-                }
-              ]
-            },
-            {
-              "group": "@push",
-              "name": "推送",
-              "items": [
-                {
-                  "id": "bark_url",
-                  "name": "Bark",
-                  "type": "text",
-                  "placeholder": "Bark RUL"
-                },
-                {
-                  "id": "pushdeer_url",
-                  "name": "PushDeer",
-                  "type": "text",
-                  "placeholder": "PushDeer URL"
-                },
-                {
-                  "id": "pushplus_url",
-                  "name": "PushPlus",
-                  "type": "text",
-                  "placeholder": "PushPlus URL"
-                },
-                {
-                  "id": "telegram_url",
-                  "name": "Telegram",
-                  "type": "text",
-                  "placeholder": "Telegram URL"
-                },
-                {
-                  "id": "gotify_url",
-                  "name": "Gotify",
-                  "type": "text",
-                  "placeholder": "Gotify URL"
-                },
-                {
-                  "id": "igotor_url",
-                  "name": "iGot",
-                  "type": "text",
-                  "placeholder": "iGot URL"
-                }
-              ]
-            },
-            {
-              "group": "自定义推送 (Webhook)",
-              "items": [
-                {
-                  "id": "custom_webhook_url",
-                  "name": "Webhook URL",
-                  "type": "text",
-                  "desc": "你的自定义接收端URL, 填写后将启用此推送."
-                },
-                {
-                  "id": "custom_webhook_method",
-                  "name": "请求方法",
-                  "type": "select",
-                  "options": [
-                    { "label": "POST", "value": "POST" },
-                    { "label": "GET", "value": "GET" }
-                  ],
-                  "val": "POST",
-                  "desc": "选择发送通知时使用的HTTP请求方法."
-                },
-                {
-                  "id": "custom_webhook_headers",
-                  "name": "请求头 (Headers)",
-                  "type": "textarea",
-                  "val": "{\"Content-Type\":\"application/json\"}",
-                  "desc": "自定义请求头, 需为标准的JSON格式. 仅在POST方法时建议使用."
-                },
-                {
-                  "id": "custom_webhook_body",
-                  "name": "请求体 (Body)",
-                  "type": "textarea",
-                  "val": "{\"title\":\"$name$\", \"content\":\"$text$\", \"code\":\"$code$\"}",
-                  "desc": "POST请求的主体内容, 需为标准的JSON格式. 支持变量 $name$, $text$, $code$."
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "smsforward_config1",
-          "name": "短信转发(1)",
-          "key": "@smsforward1",
-          "type": "object",
-          "items": [
-            {
-              "group": "基础设置",
-              "items": [
-                {
-                  "id": "enable",
-                  "name": "启用",
-                  "type": "boolean",
-                  "val": false
-                },
-                {
-                  "id": "type",
-                  "name": "转发类型",
-                  "type": "select",
-                  "val": "Tencent",
-                  "options": [
-                    {
-                      "label": "腾讯手机管家",
-                      "value": "Tencent"
-                    },
-                    {
-                      "label": "360手机卫士",
-                      "value": "Qihoo"
-                    }
-                  ],
-                  "desc": "默认为腾讯手机管家,若出现转发失败可尝试更换为360手机卫士"
-                }
-              ]
-            },
-            {
-              "group": "号码过滤",
-              "items": [
-                {
-                  "id": "sender_allow",
-                  "name": "允许名单",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配发送者号码,支持正则,多个请换行",
-                  "desc": "为空时,默认允许所有号码"
-                },
-                {
-                  "id": "sender_deny",
-                  "name": "阻止名单",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配发送者号码,支持正则,多个请换行"
-                }
-              ]
-            },
-            {
-              "group": "内容过滤",
-              "items": [
-                {
-                  "id": "text_allow",
-                  "name": "关键词允许",
-                  "type": "textarea",
-                  "val": "验证码\n取件码\n动态密码",
-                  "placeholder": "匹配短信内容,支持正则,多个请换行",
-                  "desc": "为空时,默认允许所有内容"
-                },
-                {
-                  "id": "text_deny",
-                  "name": "关键词阻止",
-                  "type": "textarea",
-                  "val": "",
-                  "placeholder": "匹配短信内容,支持正则,多个请换行"
-                }
-              ]
-            },
-            {
-              "group": "验证码提取",
-              "items": [
-                {
-                  "id": "code_test",
-                  "name": "识别规则",
-                  "type": "text",
-                  "val": "[0-9]{4,8}",
-                  "desc": "用于判断是否为验证码短信的规则, 匹配到时将进入提取流程"
-                },
-                {
-                  "id": "code_get",
-                  "name": "提取规则",
-                  "type": "text",
-                  "val": "(?<=((验证|动态密)码|code|code is):?)\\s*\\d{4,8}|\\d{4,8}(?=((为|is)您的(验证|动态密)码))",
-                  "desc": "用于提取验证码, 匹配到的第1个结果将作为验证码"
-                }
-              ]
-            },
-            {
-              "group": "隐私保护",
-              "items": [
-                {
-                  "id": "no_post",
-                  "name": "禁止提交数据",
-                  "type": "boolean",
-                  "val": false,
-                  "desc": "开启后将不会提交数据到腾讯/360接口, 用于保护隐私"
-                },
-                {
-                  "id": "replace_num",
-                  "name": "替换数字",
-                  "type": "boolean",
-                  "val": false,
-                  "desc": "开启后将会把提交的短信内容中的数字替换为随机数, 用于保护隐私"
-                }
-              ]
-            },
-            {
-              "group": "推送标题模板",
-              "items": [
-                {
-                  "id": "name_from",
-                  "name": "标题来源",
-                  "type": "select",
-                  "val": "name",
-                  "options": [
-                    {
-                      "label": "默认(发信人)",
-                      "value": "name"
-                    },
-                    {
-                      "label": "自定义",
-                      "value": "custom"
-                    }
-                  ]
-                },
-                {
-                  "id": "name_diy",
-                  "name": "自定义标题",
-                  "type": "text",
-                  "val": "短信转发"
-                }
-              ]
-            },
-            {
-              "group": "推送内容模板",
-              "items": [
-                {
-                  "id": "gotify_title",
-                  "name": "Gotify/Bark 标题",
-                  "type": "text",
-                  "val": "$name$"
-                },
-                {
-                  "id": "gotify_subtitle",
-                  "name": "Bark 副标题",
-                  "type": "text",
-                  "val": ""
-                },
-                {
-                  "id": "gotify_msg",
-                  "name": "推送内容",
-                  "type": "text",
-                  "val": "$text$",
-                  "desc": "支持变量: $name$ 发信人 $text$ 短信全文 $code$ 验证码"
-                }
-              ]
-            },
-            {
-              "group": "@push",
-              "name": "推送",
-              "items": [
-                {
-                  "id": "bark_url",
-                  "name": "Bark",
-                  "type": "text",
-                  "placeholder": "Bark RUL"
-                },
-                {
-                  "id": "pushdeer_url",
-                  "name": "PushDeer",
-                  "type": "text",
-                  "placeholder": "PushDeer URL"
-                },
-                {
-                  "id": "pushplus_url",
-                  "name": "PushPlus",
-                  "type": "text",
-                  "placeholder": "PushPlus URL"
-                },
-                {
-                  "id": "telegram_url",
-                  "name": "Telegram",
-                  "type": "text",
-                  "placeholder": "Telegram URL"
-                },
-                {
-                  "id": "gotify_url",
-                  "name": "Gotify",
-                  "type": "text",
-                  "placeholder": "Gotify URL"
-                },
-                {
-                  "id": "igotor_url",
-                  "name": "iGot",
-                  "type": "text",
-                  "placeholder": "iGot URL"
-                }
-              ]
-            },
-            {
-              "group": "自定义推送 (Webhook)",
-              "items": [
-                {
-                  "id": "custom_webhook_url",
-                  "name": "Webhook URL",
-                  "type": "text",
-                  "desc": "你的自定义接收端URL, 填写后将启用此推送."
-                },
-                {
-                  "id": "custom_webhook_method",
-                  "name": "请求方法",
-                  "type": "select",
-                  "options": [
-                    { "label": "POST", "value": "POST" },
-                    { "label": "GET", "value": "GET" }
-                  ],
-                  "val": "POST",
-                  "desc": "选择发送通知时使用的HTTP请求方法."
-                },
-                {
-                  "id": "custom_webhook_headers",
-                  "name": "请求头 (Headers)",
-                  "type": "textarea",
-                  "val": "{\"Content-Type\":\"application/json\"}",
-                  "desc": "自定义请求头, 需为标准的JSON格式. 仅在POST方法时建议使用."
-                },
-                {
-                  "id": "custom_webhook_body",
-                  "name": "请求体 (Body)",
-                  "type": "textarea",
-                  "val": "{\"title\":\"$name$\", \"content\":\"$text$\", \"code\":\"$code$\"}",
-                  "desc": "POST请求的主体内容, 需为标准的JSON格式. 支持变量 $name$, $text$, $code$."
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
 }
